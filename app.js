@@ -13,7 +13,32 @@ function exp(q){const e=q[3]||'';if(e.indexOf('\n')>-1)return e;
 const MOCK={math:{n:40,min:90,paper:'Kertas 1 (1449/1) – 40 soalan objektif'},sej:{n:40,min:60,paper:'Kertas 1 (1249/1) – 40 soalan objektif'},bm:{n:40,min:50,paper:'Latihan Sistem Bahasa & Kefahaman (objektif)'}};
 let timer=null;
 
-function allQ(sub,ch){const out=[];S[sub].chapters.forEach((c,i)=>{if(ch!=null&&ch!=i)return;c.q.forEach((q,j)=>out.push({sub,ch:i,q,id:sub+i+'_'+j}))});return out}
+/* ---------- language: ms (BM) / en / both (BM + English line) ---------- */
+const lang=()=>L.get('lang','both');
+const EC=(sub,i)=>(window.EN&&EN[sub]&&EN[sub][i])||null;
+const MON={Januari:'January',Februari:'February',Mac:'March',Mei:'May',Jun:'June',Julai:'July',Ogos:'August',Oktober:'October',Disember:'December',daripada:'of',hingga:'to'};
+const mapW=s=>String(s).replace(/\b(Januari|Februari|Mac|Mei|Jun|Julai|Ogos|Oktober|Disember|daripada|hingga)\b/g,m=>MON[m]);
+const enDiv=h=>'<div class="en">'+h+'</div>';
+function T(ms,en,pre){ /* html for one text in the chosen language; md applied */
+  const f=pre||md;if(!en||en===ms)return f(ms);const l=lang();return l==='ms'?f(ms):l==='en'?f(en):f(ms)+enDiv(f(en))}
+function qEn(it){const c=EC(it.sub,it.ch),e=c&&c.q&&c.q[it.j];if(!e)return null;const q=it.q;
+  return [e[0],e[1]||q[1].map(mapW),q[2],e[2]||q[3]]}
+function chTitle(sub,c,i,card){const e=EC(sub,i),l=lang(),no=c.n?(l==='en'?'Chapter ':'Bab ')+c.n+': ':'';
+  if(l==='ms'||!e)return esc(no+c.t);if(l==='en')return esc(no+e.t);return esc(no+c.t)+enDiv(esc(e.t))}
+function formName(sub,f){const s=S[sub],l=lang();const ms=s.formLabel?s.formLabel[f]:'Tingkatan '+f;
+  const enm=sub==='bm'?{1:'Paper 1 – Writing',2:'Paper 2 – Comprehension & Language Systems',3:'Paper 2 – Malay Literature (Komsas)'}[f]:'Form '+f;
+  return l==='ms'?ms:l==='en'?enm:ms+' / '+enm}
+function allQ(sub,ch){const out=[];S[sub].chapters.forEach((c,i)=>{if(ch!=null&&ch!=i)return;c.q.forEach((q,j)=>out.push({sub,ch:i,j,q,id:sub+i+'_'+j}))});return out}
+/* BM line followed by its English line (two blocks if line counts differ) */
+function zip(a,b){const x=a.split('\n'),y=b.split('\n');if(x.length!==y.length)return md(a)+enDiv(md(b));
+  return x.map((l,i)=>md(l)+enDiv(md(y[i]))).join('')}
+/* full view of a question in the current language */
+function view(it){const q=it.q,e=qEn(it),l=lang();
+  const qh=e?T(q[0],e[0]):md(q[0]);
+  const opts=q[1].map((o,i)=>e?T(o,e[1][i]):md(o));
+  const a=exp(q);let eh=md(a);
+  if(e){const b=exp(e);eh=l==='ms'?md(a):l==='en'?md(b):(a===b?md(a):zip(a,b))}
+  return {qh,opts,eh,ans:'ABCD'[q[2]]+'. '+(e?T(q[1][q[2]],e[1][q[2]]):md(q[1][q[2]]))}}
 function pickMock(sub){const by=S[sub].chapters.map((c,i)=>shuffle(allQ(sub,i)));const out=[];let k=0;while(out.length<MOCK[sub].n&&by.some(b=>b.length)){const b=by[k++%by.length];if(b.length)out.push(b.shift())}return shuffle(out)}
 function prog(){return L.get('prog',{})}
 function saveScore(key,right,total){const p=prog();const o=p[key]||{best:0,tries:0};o.tries++;o.last=Math.round(right/total*100);o.best=Math.max(o.best,o.last);p[key]=o;L.set('prog',p)}
@@ -37,15 +62,15 @@ function home(){setTab('home');
 function subject(k){setTab('home');const s=S[k],p=prog();
   const forms=[...new Set(s.chapters.map(c=>c.f))].sort();let h=`<a href="#/">← Home</a><h1>${s.icon} ${s.name}</h1><p class="mut sm">${s.about}</p>`;
   forms.forEach(f=>{const cs=s.chapters.map((c,i)=>[c,i]).filter(x=>x[0].f===f);if(!cs.length)return;
-    h+=`<h2>${s.formLabel?s.formLabel[f]:'Tingkatan '+f}</h2>`;
-    cs.forEach(([c,i])=>{const r=p[k+'_'+i];h+=`<a class="card" href="#/c/${k}/${i}"><b>${c.n?'Bab '+c.n+': ':''}${esc(c.t)}</b><div class="mut sm">${r?'Best '+r.best+'% · ':''}${c.q.length} MCQs</div></a>`})});
+    h+=`<h2>${esc(formName(k,f))}</h2>`;
+    cs.forEach(([c,i])=>{const r=p[k+'_'+i];h+=`<a class="card" href="#/c/${k}/${i}"><b>${chTitle(k,c,i)}</b><div class="mut sm">${r?'Best '+r.best+'% · ':''}${c.q.length} MCQs</div></a>`})});
   app.innerHTML=h+`<p><a class="btn alt" href="#/browse/${k}">Browse all MCQs</a></p>`;
 }
 
 function chapter(k,i,tab){const s=S[k],c=s.chapters[i];tab=tab||'notes';
-  let h=`<a href="#/s/${k}">← ${s.name}</a><h1>${c.n?'Bab '+c.n+': ':''}${esc(c.t)}</h1><span class="pill">${s.formLabel?s.formLabel[c.f]:'Tingkatan '+c.f}</span>
+  let h=`<a href="#/s/${k}">← ${s.name}</a><h1>${chTitle(k,c,i)}</h1><span class="pill">${esc(formName(k,c.f))}</span>
   <div class="seg"><button class="${tab=='notes'?'on':''}" data-go="#/c/${k}/${i}">Short notes</button><button class="${tab=='quiz'?'on':''}" data-go="#/c/${k}/${i}/quiz">MCQ quiz (${c.q.length})</button></div>`;
-  if(tab=='notes'){h+='<div class="card note">'+c.notes.map(([lab,pts])=>`<h3>${esc(lab)}</h3><ul>${pts.map(x=>`<li>${md(x)}</li>`).join('')}</ul>`).join('')+'</div>'}
+  if(tab=='notes'){h+='<div class="card note">'+c.notes.map(([lab,pts],ni)=>{const en=EC(k,i),eN=en&&en.n&&en.n[ni];return `<h3>${T(lab,eN&&eN[0])}</h3><ul>${pts.map((x,pi)=>`<li>${T(x,eN&&eN[1][pi])}</li>`).join('')}</ul>`}).join('')+'</div>'}
   app.innerHTML=h;
   app.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>location.hash=b.dataset.go);
   if(tab=='quiz'){const box=document.createElement('div');app.appendChild(box);runQuiz(box,shuffle(allQ(k,i)),{key:k+'_'+i,instant:true,back:`#/c/${k}/${i}`})}
@@ -54,13 +79,13 @@ function chapter(k,i,tab){const s=S[k],c=s.chapters[i];tab=tab||'notes';
 /* quiz engine: opts {instant, key, back, onDone, title} */
 function runQuiz(box,qs,o){let n=0,right=0;const wrong=[],answers=[];
   if(o.live)o.live.get=()=>({right,answers});
-  function show(){const it=qs[n],q=it.q;
+  function show(){const it=qs[n],q=it.q,V=view(it);
     const order=shuffle([0,1,2,3]);let done=false;
-    box.innerHTML=`<div class="mut sm">Question ${n+1} / ${qs.length}</div><div class="bar"><i style="width:${n/qs.length*100}%"></i></div><div class="card"><div class="q">${md(q[0])}</div>${order.map((oi,pos)=>`<button class="opt" data-i="${oi}">${'ABCD'[pos]}. ${md(q[1][oi])}</button>`).join('')}<div id="fb"></div></div>`;
+    box.innerHTML=`<div class="mut sm">Question ${n+1} / ${qs.length}</div><div class="bar"><i style="width:${n/qs.length*100}%"></i></div><div class="card"><div class="q">${V.qh}</div>${order.map((oi,pos)=>`<button class="opt" data-i="${oi}">${'ABCD'[pos]}. ${V.opts[oi]}</button>`).join('')}<div id="fb"></div></div>`;
     box.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(done)return;const pick=+b.dataset.i,ok=pick===q[2];
       answers[n]=ok;if(!ok)wrong.push(it.id);else right++;
       if(o.instant){done=true;box.querySelectorAll('.opt').forEach(x=>{if(+x.dataset.i===q[2])x.classList.add('ok');else if(x===b)x.classList.add('no')});
-        $('#fb')&&($('#fb').innerHTML=`<div class="exp">${ok?'✅ Correct!':'❌ Not quite.'}\n${md(exp(q))}</div><button class="btn" id="nx">${n+1<qs.length?'Next →':'See result'}</button>`);$('#nx').onclick=next}
+        $('#fb')&&($('#fb').innerHTML=`<div class="exp">${ok?'✅ Correct!':'❌ Not quite.'}\n${V.eh}</div><button class="btn" id="nx">${n+1<qs.length?'Next →':'See result'}</button>`);$('#nx').onclick=next}
       else{done=true;box.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');setTimeout(next,250)}})}
   function next(){n++;n<qs.length?show():finish()}
   function finish(){const pct=Math.round(right/qs.length*100);if(o.key)saveScore(o.key,right,qs.length);
@@ -72,14 +97,14 @@ function runQuiz(box,qs,o){let n=0,right=0;const wrong=[],answers=[];
   show()}
 
 function browse(k){setTab('past');const s=S[k];let h=`<a href="#/past">← Past Qs</a><h1>${s.icon} All ${s.name} MCQs</h1><p class="mut sm">Tap a question to see the answer.</p>`;
-  s.chapters.forEach((c,i)=>{h+=`<h2>${esc(c.t)}</h2>`+c.q.map(q=>`<details><summary>${md(q[0])}</summary><div style="margin-top:6px">${q[1].map((x,j)=>`<div>${'ABCD'[j]}. ${md(x)}</div>`).join('')}</div><div class="ans">✔ ${'ABCD'[q[2]]}. ${md(q[1][q[2]])}\n${md(exp(q))}</div></details>`).join('')});
+  s.chapters.forEach((c,i)=>{h+=`<h2>${chTitle(k,c,i)}</h2>`+allQ(k,i).map(it=>{const V=view(it);return `<details><summary>${V.qh}</summary><div style="margin-top:6px">${V.opts.map((x,j)=>`<div>${'ABCD'[j]}. ${x}</div>`).join('')}</div><div class="ans">✔ ${V.ans}\n${V.eh}</div></details>`}).join('')});
   app.innerHTML=h}
 
 function past(){setTab('past');let h=`<h1>📝 Past-year questions</h1><div class="card sm"><b>Please read:</b> Lembaga Peperiksaan does not publish full SPM papers online, and they are copyrighted, so they are <b>not copied into this app</b>. The practice questions here are <b>original, written in the SPM style, topics and mark format</b> – each with step-by-step answers. Under each subject you'll find <b>real papers to download</b>: LP's official examiner reports (Kupasan Mutu Jawapan) and state/school <b>trial papers (percubaan)</b>, which follow the real SPM format. Do those under exam conditions and check with the marking schemes.</div>`;
   ORDER.forEach(k=>{const s=S[k],P=window.PAPERS[k];h+=`<h2>${s.icon} ${s.name}</h2>
   <a class="card" href="#/browse/${k}"><b>Objective (MCQ) bank</b><div class="mut sm">${allQ(k).length} SPM-style MCQs with answers, grouped by chapter</div></a>
   <div class="card"><b>Structured practice (Kertas 2 style) – tap for step-by-step answer</b><div class="mut sm">${P.p2.length} questions with model answers</div>
-  ${P.p2.map(x=>`<details><summary>${md(x.q)} <span class="pill">${x.m} marks</span></summary><div class="ans">${md(x.a)}</div></details>`).join('')}</div>
+  ${P.p2.map((x,pi)=>{const e=(window.EN&&EN.p2&&EN.p2[k]&&EN.p2[k][pi])||{};return `<details><summary>${T(x.q,e.q)} <span class="pill">${x.m} marks</span></summary><div class="ans">${T(x.a,e.a)}</div></details>`}).join('')}</div>
   <div class="card"><b>Real past papers (download)</b>${P.links.map(l=>`<div class="sm" style="margin:6px 0">🔗 <a href="${l[1]}" target="_blank" rel="noopener">${esc(l[0])}</a></div>`).join('')}</div>`});
   app.innerHTML=h}
 
@@ -107,12 +132,12 @@ function mockRun(arg){setTab('mock');const queue=arg==='all'?ORDER.slice():[arg]
     app.innerHTML=`<h1>Mock result</h1><div class="card" style="text-align:center"><div class="big">${sc}%</div><div class="mut">${tot}/${all} correct</div></div>`+
     results.map(r=>`<div class="card"><b>${S[r.k].icon} ${S[r.k].name}</b> — ${r.right}/${r.total} (${Math.round(r.right/r.total*100)}%)
     <div class="mut sm">Weak chapters: ${weak(r)}</div>
-    <details><summary>Review answers</summary>${r.qs.map((x,i)=>`<div style="margin:10px 0"><div class="q">${r.answers[i]?'✅':'❌'} ${md(x.q[0])}</div><div class="ans">${'ABCD'[x.q[2]]}. ${md(x.q[1][x.q[2]])}\n${md(exp(x.q))}</div></div>`).join('')}</details></div>`).join('')+`<a class="btn" href="#/mock">Done</a>`}
+    <details><summary>Review answers</summary>${r.qs.map((x,i)=>`<div style="margin:10px 0"><div class="q">${r.answers[i]?'✅':'❌'} ${view(x).qh}</div><div class="ans">✔ ${view(x).ans}\n${view(x).eh}</div></div>`).join('')}</details></div>`).join('')+`<a class="btn" href="#/mock">Done</a>`}
   function weak(r){const m={};r.qs.forEach((x,i)=>{if(!r.answers[i]){const t=S[x.sub].chapters[x.ch].t;m[t]=(m[t]||0)+1}});const a=Object.entries(m).sort((x,y)=>y[1]-x[1]).slice(0,3).map(e=>e[0]);return a.length?a.join('; '):'none 🎉'}
   start()}
 
 function progressView(){setTab('progress');const p=prog();let h='<h1>📈 Progress</h1>';
-  ORDER.forEach(k=>{h+=`<h2>${S[k].icon} ${S[k].name}</h2><div class="card">`+S[k].chapters.map((c,i)=>{const r=p[k+'_'+i];return `<div class="sm" style="margin:6px 0">${esc(c.t)}<div class="bar"><i style="width:${r?r.best:0}%"></i></div><span class="mut">${r?'best '+r.best+'% ('+r.tries+'×)':'not tried'}</span></div>`}).join('')+'</div>'});
+  ORDER.forEach(k=>{h+=`<h2>${S[k].icon} ${S[k].name}</h2><div class="card">`+S[k].chapters.map((c,i)=>{const r=p[k+'_'+i];return `<div class="sm" style="margin:6px 0">${chTitle(k,c,i)}<div class="bar"><i style="width:${r?r.best:0}%"></i></div><span class="mut">${r?'best '+r.best+'% ('+r.tries+'×)':'not tried'}</span></div>`}).join('')+'</div>'});
   app.innerHTML=h+`<button class="btn alt" id="rs">Reset progress</button>`;$('#rs').onclick=()=>{if(confirm('Reset all progress?')){['prog','wrong','mocks'].forEach(x=>localStorage.removeItem('spm_'+x));progressView()}}}
 
 function route(){clearInterval(timer);const r=(location.hash||'#/').slice(2).split('/');window.scrollTo(0,0);
@@ -124,6 +149,12 @@ function route(){clearInterval(timer);const r=(location.hash||'#/').slice(2).spl
   if(r[0]==='mock')return r[1]?mockRun(r[1]):mockHome();
   if(r[0]==='progress')return progressView();
   home()}
+const LN={ms:'BM',en:'EN',both:'BM+EN'};
+function langBtn(){const b=$('#lang');b.textContent='🌐 '+LN[lang()]}
+$('#lang').onclick=()=>{const n={both:'en',en:'ms',ms:'both'}[lang()];L.set('lang',n);langBtn();
+  if(/^#\/(mock\/|c\/\w+\/\d+\/quiz|wrong)/.test(location.hash))return; /* running quiz: applies from the next question */
+  route()};
+langBtn();
 window.addEventListener('hashchange',route);route();
 (function(){const el=$('#countdown'),d=new Date('2026-11-23T00:00'),n=Math.ceil((d-new Date())/864e5);el.textContent=n>0?`SPM in ${n} days`:'Good luck! 🍀'})();
 if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});

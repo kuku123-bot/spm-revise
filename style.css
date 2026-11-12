@@ -42,3 +42,8 @@ html{-webkit-text-size-adjust:100%}
 .opt,.btn,.seg button,nav#tabs a{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 header{padding-top:max(12px,env(safe-area-inset-top))}
 @media(min-width:768px){body{font-size:18px}main{max-width:900px;padding:24px}.opt{padding:14px 16px}nav#tabs{justify-content:center}nav#tabs a{max-width:160px}}
+
+#lang{border:1px solid var(--line);background:var(--pri2);color:var(--pri);font-weight:700;border-radius:99px;padding:6px 12px;font-size:.85rem;cursor:pointer;margin-left:8px}
+header{gap:8px}#countdown{margin-left:auto}
+.en{color:var(--mut);font-weight:400;font-size:.92em;margin-top:2px;border-left:3px solid var(--line);padding-left:8px;white-space:pre-line}
+.opt .en{margin-top:4px}.note li .en{margin-top:1px}

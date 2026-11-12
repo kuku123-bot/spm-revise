@@ -96,7 +96,7 @@ q:[
 
 {f:4,n:10,t:'Pemasyhuran Kemerdekaan',notes:[
 ['31 Ogos 1957',['Upacara di **Stadium Merdeka**','**Union Jack diturunkan**, bendera PTM dinaikkan','Tunku melaungkan **"Merdeka!" tujuh kali**','**Tuanku Abdul Rahman** – Yang di-Pertuan Agong pertama; **Tunku** – Perdana Menteri pertama']],
-['Penyertaan',['Malaysia menyertai PBB **17 Sept 1957**','Dato\' Onn tidak lagi berpolitik dalam Perikatan']]],
+['Selepas merdeka',['Persekutuan Tanah Melayu menyertai PBB **17 Sept 1957**']]],
 q:[
 ['Pemasyhuran kemerdekaan dilakukan di',['Stadium Merdeka','Dataran Merdeka','Padang Kota','Istana Negara'],0,'1) Upacara besar 31 Ogos 1957.\n2) Tempat: Stadium Merdeka.'],
 ['Berapa kali Tunku melaungkan "Merdeka"?',['3','5','7','10'],2,'Tujuh kali.'],
