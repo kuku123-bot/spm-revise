@@ -1,0 +1,44 @@
+:root{--bg:#faf7ff;--card:#fff;--ink:#241b3a;--mut:#6b6385;--pri:#7c3aed;--pri2:#ede4ff;--ok:#16a34a;--bad:#dc2626;--line:#e6defa;--m:#2563eb;--s:#d97706;--b:#db2777}
+@media(prefers-color-scheme:dark){:root{--bg:#15101f;--card:#1f1830;--ink:#efeaff;--mut:#a99fc7;--pri:#a78bfa;--pri2:#2b2147;--line:#3a2f57;--ok:#4ade80;--bad:#f87171}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding-bottom:76px}
+header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--bg);border-bottom:1px solid var(--line)}
+.brand{font-weight:800;color:var(--pri);text-decoration:none;font-size:1.15rem}
+#countdown{font-size:.78rem;color:var(--mut)}
+main{max-width:760px;margin:0 auto;padding:16px}
+nav#tabs{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav#tabs a{flex:1;text-align:center;text-decoration:none;color:var(--mut);padding:8px 0;font-size:1.2rem;display:flex;flex-direction:column}
+nav#tabs a small{font-size:.68rem}nav#tabs a.on{color:var(--pri)}
+h1{font-size:1.5rem;margin:.2em 0 .6em}h2{font-size:1.15rem;margin:1.2em 0 .4em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:10px 0}
+a.card{display:block;text-decoration:none;color:inherit}
+a.card:active{background:var(--pri2)}
+.subj{display:flex;gap:12px;align-items:center}.subj .ic{font-size:2rem}
+.mut{color:var(--mut)}.sm{font-size:.85rem}
+.pill{display:inline-block;font-size:.72rem;padding:2px 9px;border-radius:99px;background:var(--pri2);color:var(--pri);font-weight:600;margin-right:6px}
+.btn{display:inline-block;border:0;background:var(--pri);color:#fff;padding:11px 18px;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer;text-decoration:none;margin:4px 4px 4px 0}
+.btn.alt{background:var(--pri2);color:var(--pri)}.btn:disabled{opacity:.4}
+.seg{display:flex;gap:6px;margin:10px 0;flex-wrap:wrap}
+.seg button{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:99px;font-size:.9rem;cursor:pointer}
+.seg button.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.note h3{margin:.9em 0 .3em;font-size:1rem;color:var(--pri);border-left:4px solid var(--pri);padding-left:8px}
+.note ul{margin:.2em 0;padding-left:1.2em}.note li{margin:.25em 0}
+.note b{color:var(--pri)}
+.q{font-weight:600;margin:.3em 0 .7em;white-space:pre-line}
+.opt{display:block;width:100%;text-align:left;border:1.5px solid var(--line);background:var(--card);color:var(--ink);padding:11px 13px;border-radius:12px;margin:7px 0;font-size:1rem;cursor:pointer}
+.opt.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 16%,transparent)}
+.opt.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 14%,transparent)}
+.opt.sel{border-color:var(--pri);background:var(--pri2)}
+.exp{background:var(--pri2);border-radius:10px;padding:10px 12px;margin:10px 0;font-size:.93rem;white-space:pre-line}
+.bar{height:8px;background:var(--line);border-radius:9px;overflow:hidden;margin:8px 0}.bar i{display:block;height:100%;background:var(--pri)}
+.timer{position:sticky;top:52px;background:var(--bg);padding:6px 0;font-weight:700;display:flex;justify-content:space-between;z-index:4}
+details{border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:8px 0;background:var(--card)}
+summary{cursor:pointer;font-weight:600}
+.ans{margin-top:8px;padding:8px 10px;background:var(--pri2);border-radius:8px;white-space:pre-line}
+.big{font-size:2.4rem;font-weight:800;color:var(--pri)}
+.tag-m{color:var(--m)}.tag-s{color:var(--s)}.tag-b{color:var(--b)}
+a{color:var(--pri)}
+html{-webkit-text-size-adjust:100%}
+.opt,.btn,.seg button,nav#tabs a{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+header{padding-top:max(12px,env(safe-area-inset-top))}
+@media(min-width:768px){body{font-size:18px}main{max-width:900px;padding:24px}.opt{padding:14px 16px}nav#tabs{justify-content:center}nav#tabs a{max-width:160px}}
