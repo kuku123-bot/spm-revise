@@ -1,0 +1,31 @@
+/* English points for the extra Maths sections (override the shared points, in the same order as in more_math.js) */
+function B(ch,list){const n=EN.math[ch].n,off=n.length-list.length;list.forEach((p,i)=>{n[off+i][1]=p})}
+B(0,[
+['Roots α, β: **α + β = −b/a**, **αβ = c/a**','Equation from roots: **x² − (α+β)x + αβ = 0**','Completing the square: x² + bx = (x + b/2)² − (b/2)²','f(x) = a(x − p)² + q → min/max value = **q** at **x = p**','x-intercepts = roots of f(x) = 0; y-intercept = f(0) = c','f(x) > 0 for all x if a > 0 and b² − 4ac < 0'],
+['Factorise, find roots p < q','(x − p)(x − q) > 0 → **x < p or x > q**','(x − p)(x − q) < 0 → **p < x < q**','Sketch the graph to confirm the range']]);
+B(1,[['Powers of 2: 1, 2, 4, 8, 16, 32, 64, 128','Base 2 → 8: group **3 digits** from the right (101 = 5)','Base 2 → 4: group **2 digits** from the right','Base 8 → 2: each digit becomes 3 bits; base 4 → 2: each digit becomes 2 bits','Subtraction: borrow the base value (base 2: borrow 10₂)','If unsure, convert to base 10 first, then convert back']]);
+B(2,[
+['**Form I**: P1 All A are B. P2 C is A. C: C is B','**Form II**: P1 If p, then q. P2 p is true. C: q is true','**Form III**: P1 If p, then q. P2 ~q is true. C: ~p is true','A **valid** argument with true premises is **sound (munasabah)**'],
+['~p: true ↔ false','p and q: true only if both are true','p or q: false only if both are false','**p → q is false only when p is true and q is false**','To show a statement is false, give a **counter-example**'],
+['Find the common difference d: Tn = a + (n − 1)d','Look for square/cube/power patterns: n², n³, 2ⁿ','State a general conclusion from the pattern (may not be valid)']]);
+B(3,[['n(A ∪ B ∪ C) = n(A) + n(B) + n(C) − n(A∩B) − n(A∩C) − n(B∩C) + n(A∩B∩C)','Number of subsets of a set with n elements = **2ⁿ**','Symbols: ∈ (element of), ∉ (not an element), ∅ or { } (empty set), ξ (universal set)','Shading: A′ ∩ B, (A ∪ B)′, A ∩ B′ … shade the correct part of the Venn diagram']]);
+B(4,[['**Loop**, **multiple edges**, **path**, **cycle**, **connected graph**','Complete graph Kₙ: edges = **n(n − 1)/2**','Directed graph: Σ in-degrees = Σ out-degrees = number of edges','Spanning tree: all vertices, n − 1 edges, no cycles','Shortest path: list all paths, add the weights, choose the smallest']]);
+B(5,[
+['1. Change the inequality to an equation','2. Find two points (x- and y-intercepts)','3. Line type: dashed (< >) or solid (≤ ≥)','4. Test (0,0) unless the line passes through the origin','5. Shade the region (overlapping region if more than one)'],
+['Find gradient m and y-intercept c → y = mx + c','Shaded above → y > / ≥ mx + c; below → y < / ≤','The line y = 0 is the x-axis; x = 0 is the y-axis']]);
+B(6,[['Average speed = **total distance ÷ total time**','Area of a trapezium = **½(a + b)h** (speed–time graph)','**km/h → m/s: ÷ 3.6**; m/s → km/h: × 3.6','Two lines crossing on a distance–time graph = two objects meet','Gradient between two points on a speed–time graph = average acceleration']]);
+B(7,[
+['**Mean x̄ = Σx ÷ N**','Median: N odd → middle value; N even → **average of the two middle values**','**Variance σ² = Σ(x − x̄)² ÷ N = Σx²/N − x̄²**; **SD σ = √σ²**','Data + k: mean + k, SD **unchanged**; data × k: mean × k, SD × |k|, **variance × k²**','**IQR = Q₃ − Q₁**; Range = max − min'],
+['Box plot: min, Q₁, median, Q₃, max','Stem-and-leaf plot: the key must be written','Dot plot; histogram; shape of distribution (symmetric / skewed)']]);
+B(8,[['**P(A′) = 1 − P(A)**','"At least one" = **1 − P(none)**','Tree diagram: **multiply along branches, add between branches**','Sample-space table: favourable outcomes ÷ total outcomes','Independent ≠ mutually exclusive (don\'t confuse them)']]);
+B(9,[['Simple interest **I = Prt**, total A = P + I','Compound interest **A = P(1 + r/n)^(nt)**','Emergency fund = **3–6 months of expenses**','Net cash flow = income − expenses','Planning: set goals → budget → save/invest → review']]);
+B(10,[['Direct: **y₁/x₁ = y₂/x₂**','Inverse: **y₁x₁ = y₂x₂**','Joint y ∝ x/z: **y₁z₁/x₁ = y₂z₂/x₂**','Graphs: y against x (direct) = straight line through the origin; y against 1/x (inverse) = straight line through the origin']]);
+B(11,[['(a b / c d)(e f / g h) = **(ae+bg  af+bh / ce+dg  cf+dh)**','**A⁻¹ = 1/(ad − bc) × (d −b / −c a)**','AA⁻¹ = A⁻¹A = I = (1 0 / 0 1); AI = IA = A','Solving: ax + by = h, cx + dy = k → **(x / y) = A⁻¹ (h / k)**','Scalar × matrix: multiply every entry']]);
+B(12,[['Motor insurance: **comprehensive** vs **third party**','**No-claim discount (NCD)**: 25%, 30%, 38.33%, 45%, 55% (consecutive claim-free years)','Medical co-insurance (e.g. 80/20): insurer pays 80%, policyholder 20% after the deductible','Premium after NCD = premium × (1 − NCD)']]);
+B(13,[['1. Aggregate income − relief = **chargeable income**','2. Find the tax-rate row: **cumulative tax + (rate % × balance)**','3. Subtract **rebate / zakat** = tax payable','**Assessment tax** = rate × annual value; **quit rent** = rate × area','Sales tax (goods) & service tax (services): total = price × (1 + rate)']]);
+B(14,[['Translation (a / b): (x, y) → **(x + a, y + b)**','Reflection in x-axis: (x, −y); y-axis: (−x, y); line y = x: **(y, x)**','Rotation 90° anticlockwise about origin: **(−y, x)**; 180°: (−x, −y); 90° clockwise: **(y, −x)**','Enlargement centre origin, scale factor k: **(kx, ky)**; centre (a, b): (a + k(x−a), b + k(y−b))','Scale factor k = **image distance ÷ object distance** (from the centre); area k²; volume k³']]);
+B(15,[
+['θ:  0°, 30°, 45°, 60°, 90°','sin: 0, ½, √2/2, √3/2, 1','cos: 1, √3/2, √2/2, ½, 0','tan: 0, 1/√3, 1, √3, undefined'],
+['sin θ = k → θ = α, **180° − α**','cos θ = k → θ = α, **360° − α**','tan θ = k → θ = α, **180° + α**','sin graph: 0 → 1 (90°) → 0 (180°) → −1 (270°) → 0 (360°); cos graph starts at 1','**sin²θ + cos²θ = 1; tan θ = sin θ ÷ cos θ**']]);
+B(16,[['Mean = **Σfx ÷ Σf** (fx = midpoint × frequency)','Median by formula: **L + ((N/2 − F)/f) × c**','Q₁ at N/4, Q₃ at 3N/4 — read from the ogive','Difference: histogram (frequency) vs ogive (cumulative frequency)','Compare two data sets using **median, IQR, SD**']]);
+B(17,[['Comparing plans (Plan A vs B): cost, time','Optimisation: area/perimeter/arrangements','Finance: loans, savings, instalments','Motion: distance, speed, time','Use **2 d.p.** if asked; write the **units**']]);

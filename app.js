@@ -26,7 +26,7 @@ function qEn(it){const c=EC(it.sub,it.ch),e=c&&c.q&&c.q[it.j];if(!e)return null;
 function chTitle(sub,c,i,card){const e=EC(sub,i),l=lang(),no=c.n?(l==='en'?'Chapter ':'Bab ')+c.n+': ':'';
   if(l==='ms'||!e)return esc(no+c.t);if(l==='en')return esc(no+e.t);return esc(no+c.t)+enDiv(esc(e.t))}
 function formName(sub,f){const s=S[sub],l=lang();const ms=s.formLabel?s.formLabel[f]:'Tingkatan '+f;
-  const enm=sub==='bm'?{1:'Paper 1 – Writing',2:'Paper 2 – Comprehension & Language Systems',3:'Paper 2 – Malay Literature (Komsas)'}[f]:'Form '+f;
+  const enm=sub==='bm'?{1:'Paper 1 – Writing',2:'Paper 2 – Comprehension & Language Systems',3:'Paper 2 – Malay Literature (Komsas)'}[f]:(f===6?'Forms 1–3 (assumed basics)':'Form '+f);
   return l==='ms'?ms:l==='en'?enm:ms+' / '+enm}
 function allQ(sub,ch){const out=[];S[sub].chapters.forEach((c,i)=>{if(ch!=null&&ch!=i)return;c.q.forEach((q,j)=>out.push({sub,ch:i,j,q,id:sub+i+'_'+j}))});return out}
 /* BM line followed by its English line (two blocks if line counts differ) */
